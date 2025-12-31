@@ -36,27 +36,34 @@
 
                 <!-- Body -->
                 <tbody class="divide-y divide-gray-100">
-                    @foreach ($students as $student)
+                    @auth
+                        {{-- @php Auth::user() = Auth::guard('students')->user(); @endphp --}}
                         <tr class="bg-gray-50 hover:bg-gray-100 transition">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $student->id }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $student->email }}</td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $student->password }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ Auth::user()->id }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ Auth::user()->email }}</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ Auth::user()->password }}</td>
                             <td class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium space-x-2">
-                                <a href="{{route('edit.login',$student->id)}}"
-                                    class="bg-indigo-500 hover:bg-indigo-600 text-white px-3 py-1 rounded-md transition">Edit
+                                <a href="{{ route('edit.login', Auth::user()->id) }}"
+                                    class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md transition">Edit
                                 </a>
-                                <form action="{{ route('login.delete', $student->id) }}" method="POST" class="inline">
+                                <form action="{{ route('login.delete', Auth::user()->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit"
-                                        onclick="return confirm('Are you sure?')"
+                                    <button type="submit" onclick="return confirm('Are you sure?')"
                                         class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">
                                         Delete
                                     </button>
                                 </form>
+                                <form action="{{ route('logout')}}" method="POST" class="inline">
+                                    @csrf
+                                    <button type="submit"
+                                        class="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-700 transition">
+                                        Logout
+                                    </button>
+                                </form>
                             </td>
                         </tr>
-                    @endforeach
+                    @endauth
                 </tbody>
             </table>
         </div>
